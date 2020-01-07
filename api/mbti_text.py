@@ -11,7 +11,7 @@ import thinc.extra.datasets
 import spacy
 from spacy.util import minibatch, compounding
 
-from flask import Flask, render_template, request,jsonify,json,g
+from flask import Flask, render_template, request,jsonify, json, g
 from flask_cors import CORS, cross_origin
 
 
@@ -135,7 +135,8 @@ def prediction(model=None, text=None):
     #print(test_text, doc2.cats)
     return doc2.cats
 
-@app.route('/prediction',methods =['POST'])
+@app.route('/prediction', methods=['GET'])
+@cross_origin(origin='*',headers=['Content- Type', 'Authorization', 'Access-Control-Allow-Origin'])
 def donnerPersonnalite():
     print("test predict") 
     data = request.args.get('text')
@@ -165,6 +166,7 @@ def donnerPersonnalite():
     Personnalite=INTRO+INTUITION+REFLEXION+JUGEMENT
     print(Personnalite)
     js["PERSONNALITE"]=Personnalite
+    js.headers.add('Access-Control-Allow-Origin', '*')
     return js
 
 #print(lancement())

@@ -3,25 +3,34 @@
     <b-container class="header" fluid>
       <h1 class="title">MBTI personnality study</h1>
 
-      <h2 class="m-auto py-3">Your personality</h2>
-      <h3>Describe yourself:</h3>
-      <b-form-textarea
-      id="textarea"
-      v-model="text"
-      placeholder="Enter something..."
-      rows="3"
-      max-rows="6"
-      ></b-form-textarea>
-      <form @submit="sendText">
-        <b-button type="submit" variant="primary">Envoyer</b-button>
-      </form>
-      <p> Votre personnalité est: {{ ina.PERSONNALITE }} </p>
-      <p>L'INTROVERTION: {{ ina.INTROVERTED }} L'INTUITION: {{ ina.INTUTIVE }}   JUGEMENT: {{ ina.JUDGEMENTAL }}   REFLEXION: {{ ina.THINKING }}    </p>
+      <b-container>
+        <h2 class="m-auto py-3 text-left">Your personality</h2>
+        <h3 class="text-left">Describe yourself:</h3>
+        <b-form-textarea
+          id="textarea"
+          v-model="text"
+          placeholder="Enter something..."
+          rows="3"
+          max-rows="6"
+        ></b-form-textarea>
+        <div class="text-right pb-3">
+          <b-button @click="sendText" variant="primary" class="mt-2">Envoyer</b-button>
+        </div>
+        <div v-if="result" class="text-left pb-2">
+          <p>Your personality: {{ result.PERSONNALITE }} </p>
+          <p>INTROVERSION: {{ result.INTROVERTED }}</p>
+          <p>INTUITION: {{ result.INTUTIVE }}</p>
+          <p>JUDGEMENT: {{ result.JUDGEMENTAL }}</p>
+          <p>REFLEXION: {{ result.THINKING }}</p>
+        </div>
+        </b-container>
     </b-container>
     <b-container class="pt-3">
       <b-row>
         <b-col cols="6" md="3" v-for="personality in personalities" :key="personality.title">
-          <b-card :title="personality.title" @click="openModal(personality)">
+          <b-card @click="openModal(personality)">
+            <h4>{{ personality.title }}</h4>
+            <p>{{ personality.sigle }}</p>
             <b-img class="icon m-auto" :src="require(`../assets/img/logos/${personality.img}.svg`)"></b-img>
           </b-card>
         </b-col>
@@ -79,11 +88,11 @@ export default {
         { title: 'Virtuose', desc: 'Les Virtuoses adorent explorer des mains et des yeux, toucher et examiner le monde qui les entoure avec un rationalisme calme et une curiosité pleine d’allant. Les gens qui ont ce type de personnalité sont des Faiseurs nés qui évoluent d’un projet à un autre, construisent des choses utiles et des choses superflues pour le plaisir et apprennent de leur environnement au fur et à mesure. Souvent mécaniciens et ingénieurs, le plus grand plaisir des Virtuoses est de se salir les mains en démontant les choses et en les remontant un petit peu mieux qu’elles n’étaient auparavant.', img: 'istp-virtuoso', sigle: 'ISTP' },
         { title: 'Aventurier', desc: 'Les types de personnalité « Aventurier » sont de vrais artistes, mais pas forcément dans le sens typique où ils sortiraient peindre de joyeux petits arbres. Cependant, assez souvent, ils en sont parfaitement capables. Ils ont plutôt tendance à utiliser l’esthétique, le design et même leurs propres choix et actions pour repousser les limites des conventions sociales. Les Aventuriers aiment bouleverser les attentes traditionnelles avec des expériences sur la beauté et le comportement. Il y a des chances pour qu’ils aient plus d’une fois exprimé l’idée : « Ne me rangez pas dans un tiroir ! »', img: 'isfp-adventurer', sigle: 'ISFP' },
         { title: 'Entrepreneur', desc: 'Les types de personnalité « Entrepreneur » ont toujours un impact sur leur environnement immédiat. La meilleure façon de les repérer lors d’une fête est de chercher le tourbillon de gens qui évoluent autour d’eux alors qu’ils passent de groupe en groupe. Riantes et distrayantes avec un humour brusque et truculent, les Entrepreneurs aiment attirer l’attention. Si on demande à un membre du public de monter sur scène, les Entrepreneurs se portent volontaires, ou désignent un ami timide comme volontaire.', img: 'estp-entrepreneur', sigle: 'ESTP' },
-        { title: 'Amuseur', desc: 'Si une personne est susceptible de se mettre spontanément à chanter et à danser, c’est le type de personnalité « Amuseur ». Les Amuseurs se laissent emporter par l’excitation du moment présent et veulent que tous les autres ressentent les choses de la même façon. Aucun autre type de personnalité n’est aussi généreux avec son temps et son énergie que les Amuseurs quand il s’agit d’encourager les autres, et aucun autre type de personnalité ne le fait avec un style aussi irrésistible.', img: 'esfp-entertainer', sigle: "ESFP" }
+        { title: 'Amuseur', desc: 'Si une personne est susceptible de se mettre spontanément à chanter et à danser, c’est le type de personnalité « Amuseur ». Les Amuseurs se laissent emporter par l’excitation du moment présent et veulent que tous les autres ressentent les choses de la même façon. Aucun autre type de personnalité n’est aussi généreux avec son temps et son énergie que les Amuseurs quand il s’agit d’encourager les autres, et aucun autre type de personnalité ne le fait avec un style aussi irrésistible.', img: 'esfp-entertainer', sigle: 'ESFP' }
       ],
       modalPersonality: null,
       text: '',
-      ina: ''
+      result: null
     }
   },
   methods: {
@@ -91,13 +100,12 @@ export default {
       this.modalPersonality = personality
       this.$bvModal.show('personality-modal')
     },
-    sendText (e) {
-      e.preventDefault()
-      axios.post('http://localhost:5000/prediction?text=' + this.text).then(res => {
+    sendText () {
+      axios.get('http://localhost:5000/prediction?text=' + this.text).then(res => {
         console.log(res)
-        this.ina = res.data
+        this.result = res.data
       }).catch(err => {
-        this.ina = err
+        console.log(err)
       })
     }
   }
