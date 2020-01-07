@@ -135,8 +135,7 @@ def prediction(model=None, text=None):
     #print(test_text, doc2.cats)
     return doc2.cats
 
-@app.route('/prediction', methods=['GET'])
-@cross_origin(origin='*',headers=['Content- Type', 'Authorization', 'Access-Control-Allow-Origin'])
+@app.route('/prediction', methods=['GET', 'POST'])
 def donnerPersonnalite():
     print("test predict") 
     data = request.args.get('text')
@@ -166,7 +165,6 @@ def donnerPersonnalite():
     Personnalite=INTRO+INTUITION+REFLEXION+JUGEMENT
     print(Personnalite)
     js["PERSONNALITE"]=Personnalite
-    js.headers.add('Access-Control-Allow-Origin', '*')
     return js
 
 #print(lancement())

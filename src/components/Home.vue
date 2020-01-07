@@ -14,7 +14,9 @@
           max-rows="6"
         ></b-form-textarea>
         <div class="text-right pb-3">
-          <b-button @click="sendText" variant="primary" class="mt-2">Envoyer</b-button>
+          <form @submit.prevent="sendText">
+            <b-button type="submit" variant="primary" class="mt-2">Envoyer</b-button>
+          </form>
         </div>
         <div v-if="result" class="text-left pb-2">
           <p>Your personality: {{ result.PERSONNALITE }} </p>
@@ -101,7 +103,7 @@ export default {
       this.$bvModal.show('personality-modal')
     },
     sendText () {
-      axios.get('http://localhost:5000/prediction?text=' + this.text).then(res => {
+      axios.post('http://localhost:5000/prediction?text=' + this.text).then(res => {
         console.log(res)
         this.result = res.data
       }).catch(err => {
