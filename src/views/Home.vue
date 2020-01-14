@@ -1,8 +1,6 @@
 <template>
   <div class="background">
     <b-container class="header" fluid>
-      <h1 class="title">MBTI personnality study</h1>
-
       <b-container>
         <h2 class="m-auto py-3 text-left">Your personality</h2>
         <h3 class="text-left">Describe yourself:</h3>
@@ -119,10 +117,7 @@ export default {
   .background {
     margin: 0;
     color: #fff;
-    //background: linear-gradient(-15deg, rgba(232, 131, 212, 0.53), rgba(82, 238, 0, 0.53), rgba(37, 185, 231, 0.53), rgba(247, 194, 19, 0.55));
-    //background-size: 400% 400%;
     background: rgb(86, 112, 152);
-    animation: gradientBG 15s ease infinite;
   }
 
   @keyframes gradientBG {
@@ -147,6 +142,7 @@ export default {
   }
 
   .header {
+    padding-top: 0.5em;
     background: rgba(46, 68, 91, 0.73);
   }
 
