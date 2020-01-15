@@ -1,8 +1,5 @@
 <template>
     <div style="background-color: #567098">
-      <div v-if="result" class="pt-3 pb-5">
-          <p>Your personality: {{ result }} </p>
-      </div>
       <b-container class="pt-3 pb-5">
         <div v-for="statement in statements" :key="statement.text">
           <statement v-model="statement.choice" :text="statement.text" class="py-5"></statement>
@@ -10,6 +7,9 @@
         </div>
         <b-button @click="sendResults" class="mt-3" variant="info" size="lg" pill>Soumettre</b-button>
       </b-container>
+      <div v-if="result" class="pt-3 pb-5">
+          <p>Your personality: {{ result }} </p>
+      </div>
 
     </div>
      
