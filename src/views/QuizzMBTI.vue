@@ -1,17 +1,22 @@
 <template>
     <div style="background-color: #567098">
+      <div v-if="result" class="pt-3 pb-5">
+          <p>Your personality: {{ result }} </p>
+      </div>
       <b-container class="pt-3 pb-5">
         <div v-for="statement in statements" :key="statement.text">
           <statement v-model="statement.choice" :text="statement.text" class="py-5"></statement>
           <hr>
         </div>
-
         <b-button @click="sendResults" class="mt-3" variant="info" size="lg" pill>Soumettre</b-button>
       </b-container>
+
     </div>
+     
 </template>
 
 <script>
+import * as axios from 'axios'
 export default {
   name: 'QuizzMBTI',
   data () {
@@ -80,13 +85,20 @@ export default {
     }
   },
   methods: {
-    sendResults() {
+    sendResults () {
       let results = [];
       for (let statement of this.statements) {
         results.push(statement.choice);
       }
-      console.log(results);
+      console.log(results)
+      axios.post('http://localhost:5000/quizMbtiPrediction?liste=' + results).then(res => {
+        console.log(res)
+        this.result = res.data
+      }).catch(err => {
+        console.log(err)
+      })
     }
+
   }
 }
 </script>

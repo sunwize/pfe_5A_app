@@ -101,7 +101,7 @@ export default {
       this.$bvModal.show('personality-modal')
     },
     sendText () {
-      axios.post('http://localhost:5000/prediction?text=' + this.text).then(res => {
+      axios.post('http://localhost:5000/textPrediction?text=' + this.text).then(res => {
         console.log(res)
         this.result = res.data
       }).catch(err => {

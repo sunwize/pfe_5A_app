@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
+
+# imports globaux
 from __future__ import unicode_literals, print_function
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+
+# imports text mining
 from sklearn.model_selection import train_test_split
 import random
 from pathlib import Path
@@ -11,6 +15,26 @@ import thinc.extra.datasets
 import spacy
 from spacy.util import minibatch, compounding
 
+# import prediction quiz
+from sklearn.model_selection import cross_val_score
+from sklearn import model_selection
+from sklearn.neural_network import MLPClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.svm import SVC, LinearSVC
+import matplotlib.pyplot as plt
+import ast
+import pickle
+
+# import flask
 from flask import Flask, render_template, request,jsonify, json, g
 from flask_cors import CORS, cross_origin
 
@@ -20,6 +44,10 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
 
+##########################################################################################################################
+###################################                 FONCTIONS POUR                  ######################################
+###################################                   TEXT MINING                   ######################################
+##########################################################################################################################
 
 # Charge le csv et etudie le type pour connaitre le % de l'introvertion, intuition, reflexion et jugement
 def load_data(train_data,limit=0, split=0.8):
@@ -135,7 +163,61 @@ def prediction(model=None, text=None):
     #print(test_text, doc2.cats)
     return doc2.cats
 
-@app.route('/prediction', methods=['GET', 'POST'])
+##########################################################################################################################
+###################################                 FONCTIONS POUR                  ######################################
+###################################                   QUIZZ MBTI                    ######################################
+##########################################################################################################################
+
+def evaluateQuizModels(x=None,y=None):
+    models = []
+    models.append(("LogisticRegression",LogisticRegression()))
+    models.append(("SVC",SVC()))
+    models.append(("LinearSVC",LinearSVC()))
+    models.append(("KNeighbors",KNeighborsClassifier()))
+    models.append(("DecisionTree",DecisionTreeClassifier()))
+    models.append(("RandomForest",RandomForestClassifier()))
+    rf2 = RandomForestClassifier(n_estimators=100, criterion='gini',
+                                max_depth=20, random_state=0, max_features=None)
+    models.append(("RandomForest2",rf2))
+    models.append(("MLPClassifier",MLPClassifier(solver='lbfgs', random_state=0)))
+    models.append(('LDA', LinearDiscriminantAnalysis()))
+    models.append(('SVM', SVC()))
+
+    results = []
+    names = []
+    for name,model in models:
+        result = cross_val_score(model, x, y,  cv=3)
+        names.append(name)
+        results.append(result)
+
+    for i in range(len(names)):
+        print(names[i],results[i].mean())
+
+def entrainementQuiz(x=None, y=None,sample_size=0.3):
+    # TEST DES MODELS
+    # # UTILISATION DU MODEL 
+    x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=sample_size)
+    alg = MLPClassifier(solver='lbfgs', random_state=0)
+    alg.fit(x_train, y_train)
+    print(alg.score(x_test, y_test))
+    predictions = alg.predict(x_test)
+    print(predictions)
+    # save the model to disk
+    filename = 'model_quiz_mbti.sav'
+    pickle.dump(alg, open(filename, 'wb'))
+
+def predictionQuiz(model=None,x=None):
+    # load the model from disk
+    loaded_model = pickle.load(open(model, 'rb'))
+    personnalite = loaded_model.predict(x)
+    return personnalite
+
+##########################################################################################################################
+###################################                 ROUTES POUR LES                 ######################################
+###################################                   PREDICTIONS                   ######################################
+##########################################################################################################################
+
+@app.route('/textPrediction', methods=['GET', 'POST'])
 def donnerPersonnalite():
     print("test predict") 
     data = request.args.get('text')
@@ -167,6 +249,31 @@ def donnerPersonnalite():
     js["PERSONNALITE"]=Personnalite
     return js
 
-#print(lancement())
+@app.route('/quizMbtiPrediction', methods=['GET', 'POST'])
+def donnerPersonnaliteQuiz():
+    data = request.args.get('liste')
+    data='[['+data+']]'
+    data=ast.literal_eval(data)
+    input = pd.DataFrame(data)
+    print(input.shape)
+
+    #input[['q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10', 'q11', 'q12', 'q13', 'q14', 'q15', 'q16', 'q17', 'q18', 'q19', 'q20', 'q21', 'q22', 'q23', 'q24', 'q25', 'q26', 'q27', 'q28', 'q29', 'q30', 'q31', 'q32', 'q33', 'q34', 'q35', 'q36', 'q37', 'q38', 'q39', 'q40', 'q41', 'q42', 'q43', 'q44', 'q45', 'q46', 'q47', 'q48', 'q49', 'q50', 'q51', 'q52', 'q53', 'q54', 'q55', 'q56', 'q57', 'q58', 'q59']] = pd.DataFrame(data.values.tolist())
+    print(input.shape)
+    #Chargement dataset
+    df = pd.read_csv('dataset_mbti_quiz.csv', names=['Personnalite', 'Reponses'])
+
+    # Nombre de ligne par personnalité 
+    #print(df.groupby('Personnalite').count())
+    for i in range(len(df)):
+          df['Reponses'][i] = ast.literal_eval(df['Reponses'][i])
+    
+    df[['q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10', 'q11', 'q12', 'q13', 'q14', 'q15', 'q16', 'q17', 'q18', 'q19', 'q20', 'q21', 'q22', 'q23', 'q24', 'q25', 'q26', 'q27', 'q28', 'q29', 'q30', 'q31', 'q32', 'q33', 'q34', 'q35', 'q36', 'q37', 'q38', 'q39', 'q40', 'q41', 'q42', 'q43', 'q44', 'q45', 'q46', 'q47', 'q48', 'q49', 'q50', 'q51', 'q52', 'q53', 'q54', 'q55', 'q56', 'q57', 'q58', 'q59']] = pd.DataFrame(df.Reponses.values.tolist(), index= df.index)
+
+    y=df.Personnalite
+    x=df.drop(['Reponses', 'Personnalite' ],axis=1)
+    entrainementQuiz(x,y)
+    Personnalite = predictionQuiz(model="model_quiz_mbti.sav", x=input)
+    print(Personnalite)
+    return Personnalite[0]
 
 app.run(debug=True)
