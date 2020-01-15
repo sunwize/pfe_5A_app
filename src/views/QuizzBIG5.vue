@@ -61,16 +61,16 @@ export default {
                     { text: 'Shirk my duties.\n', choice: 3 },
                     { text: 'Have frequent mood swings.\n', choice: 3 },
                     { text: 'Use difficult words.\n', choice: 3 },
-                    { text: 'Dont mind being the center of attention.\n', choice: 3 },
-                    { text: 'Feel others emotions\n', choice: 3 },
-                    { text: 'Follow a schedule.\n', choice: 3 },
-                    { text: 'Get irritated easily.\n', choice: 3 },
-                    { text: 'Spend time reflecting on things.\n', choice: 3 },
-                    { text: 'Am quiet around strangers.\n', choice: 3 },
-                    { text: 'Make people feel at ease\n', choice: 3 },
-                    { text: 'Am exacting in my work\n', choice: 3 },
-                    { text: 'Often feel blue.\n', choice: 3 },
-                    { text: 'Am full of ideas.\n', choice: 3 }
+                    { text: 'Je me fiche d\'être le centre d\'intérêt.\n', choice: 3 },
+                    { text: 'Je ressens les émotions des autres\n', choice: 3 },
+                    { text: 'Je suis un planning.\n', choice: 3 },
+                    { text: 'Je suis facilement irrité.\n', choice: 3 },
+                    { text: 'Je passe du temps à réflichir.\n', choice: 3 },
+                    { text: 'Je suis silencieux autour des gens que je ne connais pas.\n', choice: 3 },
+                    { text: 'Je mets les gens à l\'aise\n', choice: 3 },
+                    { text: 'Je suis exigent dans mon travail\n', choice: 3 },
+                    { text: 'Je me sens triste souvent.\n', choice: 3 },
+                    { text: 'J\'ai beaucoup d\'idées.\n', choice: 3 }
       ],
       result: ''
     }
