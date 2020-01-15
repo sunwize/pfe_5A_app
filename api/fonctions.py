@@ -203,3 +203,34 @@ def predictionQuiz(model=None,x=None):
     loaded_model = pickle.load(open(model, 'rb'))
     personnalite = loaded_model.predict(x)
     return personnalite
+
+##########################################################################################################################
+###################################                 FONCTIONS POUR                  ######################################
+###################################                   QUIZ  BIG5                    ######################################
+##########################################################################################################################
+
+def calculScoreBigFive(tabR=None):
+    E = 20 + tabR[0] - tabR[5] + tabR[10] - tabR[15] + tabR[20] - tabR[25] + tabR[30] - tabR[35] + tabR[40] - tabR[45] 
+    A = 14 - tabR[1] + tabR[6]  - tabR[11] + tabR[16] - tabR[21] + tabR[26] - tabR[31] + tabR[36] + tabR[41] + tabR[46]    
+    C = 14 + tabR[2] - tabR[7]  + tabR[12] - tabR[17] + tabR[22] - tabR[27] + tabR[32] - tabR[37] + tabR[42] + tabR[47]   
+    N = 38 - tabR[3] + tabR[8]  - tabR[13] + tabR[18] - tabR[23] - tabR[28] - tabR[33] - tabR[38] - tabR[43] - tabR[48]    
+    O = 8 + tabR[4] - tabR[9]   + tabR[14] - tabR[19] + tabR[24] - tabR[29] + tabR[34] + tabR[39] + tabR[44] + tabR[49] 
+    ScoreG=dict({"O": O, "C": C, "E": E, "A": A, "N":N})
+    SigleBIG5=""
+
+    # Social ou Reserved (dimension Extraversion)
+    # Limbic ou Calm (dimension Névrosisme)
+    # Organized ou Unstructured (dimension Conscienciosité)
+    # Accommodating ou Egocentric (dimension Agréabilité)
+    # Non-curious ou Inquisitive (dimension Ouverture)
+    lScore=[[E,"S","R"],[N,"L","C"],[C,"O","U"],[A,"A","E"],[O,"N","I"]]
+    
+    for Score,trait1,trait2 in lScore:
+        if Score >= 50:
+            SigleBIG5=SigleBIG5+trait1
+        else:
+            SigleBIG5=SigleBIG5+trait2
+    
+    print(SigleBIG5)
+    print([ScoreG,SigleBIG5])
+    return SigleBIG5

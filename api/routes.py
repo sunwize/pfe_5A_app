@@ -1,9 +1,10 @@
 
-from fonctions import load_data, prediction, entrainementQuiz, predictionQuiz
+from fonctions import load_data, prediction, entrainementQuiz, predictionQuiz, calculScoreBigFive
 import pandas as pd
 from flask import Flask, render_template, request,jsonify, json, g
 from flask_cors import CORS, cross_origin
 import ast
+import pymongo
 ##########################################################################################################################
 ###################################                 ROUTES POUR LES                 ######################################
 ###################################                   PREDICTIONS                   ######################################
@@ -69,3 +70,44 @@ def donnerPersonnaliteQuiz():
     Personnalite = predictionQuiz(model="model/models_quiz/model_quiz_mbti.sav", x=input)
     print(Personnalite)
     return Personnalite[0]
+
+
+@app.route('/quizBig5Prediction', methods=['GET', 'POST'])
+def donnerPersonnaliteQuizB5():
+    data = request.args.get('liste')
+    data='['+data+']'
+    data=ast.literal_eval(data)
+
+    result=calculScoreBigFive(data)
+    return result
+   
+#Gestion BDD
+client = pymongo.MongoClient("mongodb+srv://teddy:j9cnGtQYsCFLKOHX@cluster0-2heou.mongodb.net/test?retryWrites=true&w=majority")
+db = client.test
+
+@app.route('/insert', methods=['GET', 'POST'])
+def insertBDD():
+    data = request.args.get('liste')
+    data='['+data+']'
+    data=ast.literal_eval(data)
+    post = {
+         "mbti": data[0],
+         "big5": data[1],
+         }
+
+    posts = db.posts
+    posts.insert_one(post).inserted_id
+
+@app.route('/get', methods=['GET', 'POST'])
+def getBDD():
+    data = request.args.get('liste')
+    data='['+data+']'
+    data=ast.literal_eval(data)
+    get = {
+         "mbti": data[0],
+         "big5": data[1],
+         }
+
+    posts = db.posts
+    result = posts.find_one(get)
+    return result

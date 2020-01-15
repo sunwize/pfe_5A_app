@@ -79,6 +79,12 @@ export default {
     sendResults () {
       let results = this.statements.map(s => s.choice);
       console.log(results);
+       axios.post('http://localhost:5000/quizBig5Prediction?liste=' + results).then(res => {
+        console.log(res)
+        this.result = res.data
+      }).catch(err => {
+        console.log(err)
+      })
     }
 
   }
