@@ -6,7 +6,8 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item href="/quizz">Quizz MBTI</b-nav-item>
+        <b-nav-item href="/quizz-mbti">Quizz MBTI</b-nav-item>
+        <b-nav-item href="/quizz-big5">Quizz Big Five</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>

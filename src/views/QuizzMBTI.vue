@@ -2,7 +2,7 @@
     <div style="background-color: #567098">
       <b-container class="pt-3 pb-5">
         <div v-for="statement in statements" :key="statement.text">
-          <statement v-model="statement.choice" :text="statement.text" class="py-5"></statement>
+          <statement-mbti v-model="statement.choice" :text="statement.text" class="py-5"></statement-mbti>
           <hr>
         </div>
         <b-button @click="sendResults" class="mt-3" variant="info" size="lg" pill>Soumettre</b-button>
@@ -12,7 +12,7 @@
       </div>
 
     </div>
-     
+
 </template>
 
 <script>
@@ -21,6 +21,7 @@ export default {
   name: 'QuizzMBTI',
   data () {
     return {
+      result: '',
       statements: [ { text: 'Vous avez des difficultés à vous présenter à d’autres personnes.\n', choice: 4 },
                     { text: 'Vous êtes souvent si perdu(e) dans vos pensées que vous ignorez ou oubliez votre entourage.\n', choice: 4 },
                     { text: 'Vous essayez de répondre dès que possible à vos e-mails et ne supportez pas d’avoir une boîte de messagerie mal organisée.\n', choice: 4 },

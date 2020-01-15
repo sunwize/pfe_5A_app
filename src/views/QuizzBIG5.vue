@@ -2,17 +2,17 @@
     <div style="background-color: #567098">
       <b-container class="pt-3 pb-5">
         <div v-for="statement in statements" :key="statement.text">
-          <statement v-model="statement.choice" :text="statement.text" class="py-5"></statement>
+          <statement-bf v-model="statement.choice" :text="statement.text" class="py-4"></statement-bf>
           <hr>
         </div>
         <b-button @click="sendResults" class="mt-3" variant="info" size="lg" pill>Soumettre</b-button>
       </b-container>
       <div v-if="result" class="pt-3 pb-5">
-          <p>Your personality: {{ result }} </p>
+          <p class="text-white">Your personality: {{ result }} </p>
       </div>
 
     </div>
-     
+
 </template>
 
 <script>
@@ -71,16 +71,14 @@ export default {
                     { text: 'Am exacting in my work\n', choice: 3 },
                     { text: 'Often feel blue.\n', choice: 3 },
                     { text: 'Am full of ideas.\n', choice: 3 }
-
-      ]
+      ],
+      result: ''
     }
   },
   methods: {
     sendResults () {
-      let results = [];
-      for (let statement of this.statements) {
-        results.push(statement.choice);
-      }
+      let results = this.statements.map(s => s.choice);
+      console.log(results);
     }
 
   }

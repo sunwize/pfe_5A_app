@@ -8,9 +8,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import QuizzStatement from './components/QuizzStatement'
-import QuizzRadioButtons from './components/QuizzRadioButtons'
-import Menu from './components/Menu'
+import QuizzStatementMBTI from './components/QuizzStatementMBTI'
+import QuizzButton from "./components/QuizzButton"
+import QuizzStatementBigF from "./components/QuizzStatementBigF"
 
 Vue.config.productionTip = false
 
@@ -18,9 +18,10 @@ library.add(fas)
 
 Vue.use(BootstrapVue)
 
-Vue.component('statement', QuizzStatement)
-Vue.component('quizz-buttons', QuizzRadioButtons)
+Vue.component('statement-mbti', QuizzStatementMBTI)
 Vue.component('icon', FontAwesomeIcon)
+Vue.component('quizz-button', QuizzButton)
+Vue.component('statement-bf', QuizzStatementBigF)
 
 new Vue({
   router,
