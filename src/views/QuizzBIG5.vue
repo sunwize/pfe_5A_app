@@ -9,9 +9,15 @@
         </div>
         <b-button @click="sendResults" class="mt-3" variant="info" size="lg" pill>Soumettre</b-button>
       </b-container>
-      <div v-if="result" class="pt-3 pb-5">
-          <p class="text-white">Your personality: {{ result }} </p>
-      </div>
+
+      <b-modal id="modal-bf" title="Big Five Résultat" hide-footer>
+        <b-spinner v-if="loading" class="d-block m-auto" variant="light" label="Spinning"></b-spinner>
+
+        <div v-if="result && !loading">
+          <h3 class="text-center">{{ result }}</h3>
+          <b-button @click="hideModal" class="float-right px-3" variant="info" pill>Ok</b-button>
+        </div>
+      </b-modal>
     </div>
 </template>
 
@@ -21,6 +27,7 @@ export default {
   name: 'QuizzBIG5',
   data () {
     return {
+      loading: false,
       result: '',
       statements: [ { text: 'Je suis un gros fêtard.\n', choice: 3 },
                     { text: 'Je me soucie peu des autres.\n', choice: 3 },
@@ -77,14 +84,20 @@ export default {
   },
   methods: {
     sendResults () {
+      this.loading = true;
+      this.$bvModal.show('modal-bf');
       let results = this.statements.map(s => s.choice);
       console.log(results);
        axios.post('http://localhost:5000/quizBig5Prediction?liste=' + results).then(res => {
-        console.log(res)
-        this.result = res.data
+        console.log(res);
+        this.$store.commit('setBfResult', res.data);
+         this.result = res.data;
+        this.loading = false;
+        this.$store.dispatch('sendProfileToDB');
       }).catch(err => {
-        console.log(err)
-      })
+        console.log(err);
+        this.loading = false;
+      });
     },
     scroll(index) {
       index++;
@@ -94,6 +107,9 @@ export default {
         return;
 
       this.$refs[next][0].scrollIntoView({ behavior: 'smooth' });
+    },
+    hideModal() {
+      this.$bvModal.hide('modal-bf');
     }
   }
 }

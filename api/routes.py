@@ -1,3 +1,4 @@
+from bson import ObjectId, json_util
 
 from fonctions import load_data, prediction, entrainementQuiz, predictionQuiz, calculScoreBigFive
 import pandas as pd
@@ -9,6 +10,12 @@ import pymongo
 ###################################                 ROUTES POUR LES                 ######################################
 ###################################                   PREDICTIONS                   ######################################
 ##########################################################################################################################
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -87,16 +94,14 @@ db = client.test
 
 @app.route('/insert', methods=['GET', 'POST'])
 def insertBDD():
-    data = request.args.get('liste')
-    data='['+data+']'
-    data=ast.literal_eval(data)
-    post = {
-         "mbti": data[0],
-         "big5": data[1],
-         }
-
+    data = json.loads(request.get_data())
+    post = dict()
+    post['mbti'] = data['mbti']
+    post['big5'] = data['bf']
+    print(type(post))
     posts = db.posts
     posts.insert_one(post).inserted_id
+    return post
 
 @app.route('/get', methods=['GET', 'POST'])
 def getBDD():

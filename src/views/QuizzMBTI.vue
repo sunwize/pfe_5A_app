@@ -9,9 +9,15 @@
         </div>
         <b-button ref="test" @click="sendResults" class="mt-3" variant="info" size="lg" pill>Soumettre</b-button>
       </b-container>
-      <div v-if="result" class="pt-3 pb-5">
-          <p>Your personality: {{ result }} </p>
-      </div>
+
+      <b-modal id="modal-mbti" title="MBTI Résultat" hide-footer>
+        <b-spinner v-if="loading" class="d-block m-auto" variant="light" label="Spinning"></b-spinner>
+
+        <div v-if="result && !loading">
+          <personality :personality="result"></personality>
+          <b-button @click="hideModal" class="float-right px-3" variant="info" pill>Ok</b-button>
+        </div>
+      </b-modal>
     </div>
 </template>
 
@@ -21,7 +27,8 @@ export default {
   name: 'QuizzMBTI',
   data () {
     return {
-      result: '',
+      loading: false,
+      result: null,
       statements: [ { text: 'Vous avez des difficultés à vous présenter à d’autres personnes.\n', choice: 4 },
                     { text: 'Vous êtes souvent si perdu(e) dans vos pensées que vous ignorez ou oubliez votre entourage.\n', choice: 4 },
                     { text: 'Vous essayez de répondre dès que possible à vos e-mails et ne supportez pas d’avoir une boîte de messagerie mal organisée.\n', choice: 4 },
@@ -87,17 +94,24 @@ export default {
   },
   methods: {
     sendResults () {
+      this.loading = true;
+      this.$bvModal.show('modal-mbti');
       let results = [];
-      for (let statement of this.statements) {
+
+      for (let statement of this.statements)
         results.push(statement.choice);
-      }
-      console.log(results)
+
+      console.log(results);
       axios.post('http://localhost:5000/quizMbtiPrediction?liste=' + results).then(res => {
-        console.log(res)
-        this.result = res.data
+        console.log(res);
+        this.$store.commit('setMbtiResult', res.data);
+        this.result = this.$store.getters.getPersonalities.filter(p => p.sigle.toLowerCase() === res.data.toLowerCase()).pop();
+        this.loading = false;
+        this.$store.dispatch('sendProfileToDB');
       }).catch(err => {
-        console.log(err)
-      })
+        console.log(err);
+        this.loading = false;
+      });
     },
     scroll(index) {
       index++;
@@ -107,6 +121,9 @@ export default {
         return;
 
       this.$refs[next][0].scrollIntoView({ behavior: 'smooth' });
+    },
+    hideModal() {
+      this.$bvModal.hide('modal-mbti');
     }
   }
 }

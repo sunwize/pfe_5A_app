@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" style="background-color: #273a4e">
+  <b-navbar sticky toggleable="lg" type="dark" style="background-color: #273a4e">
     <b-navbar-brand href="/">MBTI personnality study</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
