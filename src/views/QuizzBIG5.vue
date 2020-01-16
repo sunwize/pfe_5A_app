@@ -1,18 +1,18 @@
 <template>
     <div style="background-color: #567098">
       <b-container class="pt-3 pb-5">
-        <div v-for="statement in statements" :key="statement.text">
-          <statement-bf v-model="statement.choice" :text="statement.text" class="py-4"></statement-bf>
-          <hr>
+        <div v-for="(statement, index) in statements" :key="statement.text">
+          <div :ref="'bf' + index">
+            <statement-bf @click.native="scroll(index)" v-model="statement.choice" :text="statement.text" class="py-5"></statement-bf>
+            <hr>
+          </div>
         </div>
         <b-button @click="sendResults" class="mt-3" variant="info" size="lg" pill>Soumettre</b-button>
       </b-container>
       <div v-if="result" class="pt-3 pb-5">
           <p class="text-white">Your personality: {{ result }} </p>
       </div>
-
     </div>
-
 </template>
 
 <script>
@@ -21,6 +21,7 @@ export default {
   name: 'QuizzBIG5',
   data () {
     return {
+      result: '',
       statements: [ { text: 'Je suis un gros fêtard.\n', choice: 3 },
                     { text: 'Je me soucie peu des autres.\n', choice: 3 },
                     { text: 'Je suis toujours prêt.\n', choice: 3 },
@@ -71,8 +72,7 @@ export default {
                     { text: 'Je suis exigent dans mon travail\n', choice: 3 },
                     { text: 'Je me sens triste souvent.\n', choice: 3 },
                     { text: 'J\'ai beaucoup d\'idées.\n', choice: 3 }
-      ],
-      result: ''
+      ]
     }
   },
   methods: {
@@ -85,8 +85,16 @@ export default {
       }).catch(err => {
         console.log(err)
       })
-    }
+    },
+    scroll(index) {
+      index++;
+      let next = 'bf' + index;
 
+      if (!this.$refs[next])
+        return;
+
+      this.$refs[next][0].scrollIntoView({ behavior: 'smooth' });
+    }
   }
 }
 </script>

@@ -1,18 +1,18 @@
 <template>
     <div style="background-color: #567098">
       <b-container class="pt-3 pb-5">
-        <div v-for="statement in statements" :key="statement.text">
-          <statement-mbti v-model="statement.choice" :text="statement.text" class="py-5"></statement-mbti>
-          <hr>
+        <div v-for="(statement, index) in statements" :key="statement.text">
+          <div :ref="'mbti' + index">
+            <statement-mbti @click.native="scroll(index)" v-model="statement.choice" :text="statement.text" class="py-5"></statement-mbti>
+            <hr>
+          </div>
         </div>
-        <b-button @click="sendResults" class="mt-3" variant="info" size="lg" pill>Soumettre</b-button>
+        <b-button ref="test" @click="sendResults" class="mt-3" variant="info" size="lg" pill>Soumettre</b-button>
       </b-container>
       <div v-if="result" class="pt-3 pb-5">
           <p>Your personality: {{ result }} </p>
       </div>
-
     </div>
-
 </template>
 
 <script>
@@ -85,9 +85,6 @@ export default {
       ]
     }
   },
-  mounted() {
-    console.log(this.$route.path);
-  },
   methods: {
     sendResults () {
       let results = [];
@@ -101,8 +98,16 @@ export default {
       }).catch(err => {
         console.log(err)
       })
-    }
+    },
+    scroll(index) {
+      index++;
+      let next = 'mbti' + index;
 
+      if (!this.$refs[next])
+        return;
+
+      this.$refs[next][0].scrollIntoView({ behavior: 'smooth' });
+    }
   }
 }
 </script>
