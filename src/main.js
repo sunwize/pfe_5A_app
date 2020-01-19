@@ -13,6 +13,7 @@ import QuizzStatementMBTI from './components/QuizzStatementMBTI'
 import QuizzButton from "./components/QuizzButton"
 import QuizzStatementBigF from "./components/QuizzStatementBigF"
 import Personality from './components/Personality'
+import HorizontalBars from './components/HorizontalBars'
 
 Vue.config.productionTip = false
 
@@ -25,6 +26,7 @@ Vue.component('icon', FontAwesomeIcon)
 Vue.component('quizz-button', QuizzButton)
 Vue.component('statement-bf', QuizzStatementBigF)
 Vue.component('personality', Personality)
+Vue.component('horizontal-bars', HorizontalBars)
 
 new Vue({
   router,

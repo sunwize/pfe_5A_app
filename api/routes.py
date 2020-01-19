@@ -2,7 +2,7 @@ from bson import ObjectId, json_util
 
 from fonctions import load_data, prediction, entrainementQuiz, predictionQuiz, calculScoreBigFive
 import pandas as pd
-from flask import Flask, render_template, request,jsonify, json, g
+from flask import Flask, render_template, request, jsonify, json, g
 from flask_cors import CORS, cross_origin
 import ast
 import pymongo
@@ -10,12 +10,6 @@ import pymongo
 ###################################                 ROUTES POUR LES                 ######################################
 ###################################                   PREDICTIONS                   ######################################
 ##########################################################################################################################
-
-class JSONEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, ObjectId):
-            return str(o)
-        return json.JSONEncoder.default(self, o)
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -82,10 +76,10 @@ def donnerPersonnaliteQuiz():
 @app.route('/quizBig5Prediction', methods=['GET', 'POST'])
 def donnerPersonnaliteQuizB5():
     data = request.args.get('liste')
-    data='['+data+']'
-    data=ast.literal_eval(data)
+    data = '['+data+']'
+    data = ast.literal_eval(data)
 
-    result=calculScoreBigFive(data)
+    result = calculScoreBigFive(data)
     return result
    
 #Gestion BDD

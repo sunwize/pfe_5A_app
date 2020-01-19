@@ -7,7 +7,7 @@
             <hr>
           </div>
         </div>
-        <b-button ref="test" @click="sendResults" class="mt-3" variant="info" size="lg" pill>Soumettre</b-button>
+        <b-button ref="test" @click="sendResults" class="mt-3" variant="info" size="lg" pill>Valider</b-button>
       </b-container>
 
       <b-modal id="modal-mbti" title="MBTI Résultat" hide-footer>
@@ -15,6 +15,7 @@
 
         <div v-if="result && !loading">
           <personality :personality="result"></personality>
+          <p class="text-justify">{{ result.desc }}</p>
           <b-button @click="hideModal" class="float-right px-3" variant="info" pill>Ok</b-button>
         </div>
       </b-modal>

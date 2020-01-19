@@ -1,20 +1,19 @@
 <template>
     <div style="background-color: #567098">
       <b-container class="pt-3 pb-5">
-        <div v-for="(statement, index) in statements" :key="statement.text">
-          <div :ref="'bf' + index">
-            <statement-bf @click.native="scroll(index)" v-model="statement.choice" :text="statement.text" class="py-5"></statement-bf>
-            <hr>
-          </div>
+        <div v-for="statement in statements" :key="statement.text">
+          <statement-bf v-model="statement.choice" :text="statement.text" class="py-5"></statement-bf>
+          <hr>
         </div>
-        <b-button @click="sendResults" class="mt-3" variant="info" size="lg" pill>Soumettre</b-button>
+        <b-button @click="sendResults" class="mt-3" variant="info" size="lg" pill>Valider</b-button>
       </b-container>
 
-      <b-modal id="modal-bf" title="Big Five Résultat" hide-footer>
+      <b-modal id="modal-bf" title="Big Five Résultat" size="lg" hide-footer>
         <b-spinner v-if="loading" class="d-block m-auto" variant="light" label="Spinning"></b-spinner>
 
         <div v-if="result && !loading">
           <h3 class="text-center">{{ result }}</h3>
+          <horizontal-bars :chartdata="chartdata" :options="options"/>
           <b-button @click="hideModal" class="float-right px-3" variant="info" pill>Ok</b-button>
         </div>
       </b-modal>
@@ -66,9 +65,9 @@ export default {
                     { text: 'J\'apprends rapidement.\n', choice: 3 },
                     { text: 'Je n\'aime pas attirer l\'attention sur moi.\n', choice: 3 },
                     { text: 'Je prends du temps pour les autres.\n', choice: 3 },
-                    { text: 'Eviter les responsabilités.\n', choice: 3 },
-                    { text: 'Avoir des sauts d\'humeur.\n', choice: 3 },
-                    { text: 'Utiliser des mots élaborés.\n', choice: 3 },
+                    { text: 'J\'évite les responsabilités.\n', choice: 3 },
+                    { text: 'J\'ai des sauts d\'humeur.\n', choice: 3 },
+                    { text: 'J\'utilise des mots élaborés.\n', choice: 3 },
                     { text: 'Je me fiche d\'être le centre d\'intérêt.\n', choice: 3 },
                     { text: 'Je ressens les émotions des autres\n', choice: 3 },
                     { text: 'Je suis un planning.\n', choice: 3 },
@@ -77,36 +76,75 @@ export default {
                     { text: 'Je suis silencieux autour des gens que je ne connais pas.\n', choice: 3 },
                     { text: 'Je mets les gens à l\'aise\n', choice: 3 },
                     { text: 'Je suis exigent dans mon travail\n', choice: 3 },
-                    { text: 'Je me sens triste souvent.\n', choice: 3 },
+                    { text: 'Je me sens souvent triste.\n', choice: 3 },
                     { text: 'J\'ai beaucoup d\'idées.\n', choice: 3 }
-      ]
+      ],
+      chartdata: {
+        labels: ['L\'ouverture à l\'expérience', 'La conscienciosité', 'L\'extraversion', 'L\'agréabilité', 'Le névrosisme'],
+        datasets: [
+          {
+            label: '',
+            backgroundColor: '#f87979',
+            data: [0, 0, 0, 0, 0]
+          }
+        ]
+      },
+      options: {
+        legend: {
+          display: false
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        scales:{
+          xAxes: [{
+            display: false,
+            beginAtZero: true,
+            ticks: {
+              suggestedMax: 100,
+              suggestedMin: 0
+            }
+          }]
+        }
+      }
     }
   },
   methods: {
     sendResults () {
-      this.loading = true;
-      this.$bvModal.show('modal-bf');
-      let results = this.statements.map(s => s.choice);
-      console.log(results);
-       axios.post('http://localhost:5000/quizBig5Prediction?liste=' + results).then(res => {
-        console.log(res);
-        this.$store.commit('setBfResult', res.data);
-         this.result = res.data;
-        this.loading = false;
-        this.$store.dispatch('sendProfileToDB');
-      }).catch(err => {
-        console.log(err);
-        this.loading = false;
-      });
-    },
-    scroll(index) {
-      index++;
-      let next = 'bf' + index;
+        this.loading = true;
+        this.$bvModal.show('modal-bf');
+        let results = this.statements.map(s => s.choice);
+        console.log(results);
 
-      if (!this.$refs[next])
-        return;
+        axios.post('http://localhost:5000/quizBig5Prediction?liste=' + results).then(res => {
+          console.log(res);
+          this.$store.commit('setBfResult', res.data.sigle);
+          this.result = res.data.sigle;
+          let score = res.data.score;
 
-      this.$refs[next][0].scrollIntoView({ behavior: 'smooth' });
+          this.chartdata = {
+           labels: ['Ouverture', 'Conscienciosité', 'Extraversion', 'Agréabilité', 'Névrosisme'],
+           datasets: [
+             {
+               borderColor: 'red',
+               label: 'Big Five',
+               backgroundColor: [
+                 '#32f871',
+                 '#f87979',
+                 '#bc9bf8',
+                 '#7c92f8',
+                 '#f89946'
+               ],
+               data: [score.O * 100/40, score.C * 100/40, score.E * 100/40, score.A * 100/40, score.N * 100/40]
+             }
+           ]
+          };
+
+          this.loading = false;
+          this.$store.dispatch('sendProfileToDB');
+        }).catch(err => {
+          console.log(err);
+          this.loading = false;
+        });
     },
     hideModal() {
       this.$bvModal.hide('modal-bf');
