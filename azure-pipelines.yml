@@ -49,7 +49,7 @@ stages:
 
     - task: DeleteFiles@1
       inputs:
-        SourceFolder: 
+        SourceFolder: $(projectRoot)
         Contents: 'dataset'
 
     - task: ArchiveFiles@2
