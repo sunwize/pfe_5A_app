@@ -47,6 +47,11 @@ stages:
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
 
+    - task: DeleteFiles@1
+      inputs:
+        SourceFolder: 
+        Contents: 'dataset'
+
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
