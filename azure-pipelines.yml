@@ -85,8 +85,8 @@ stages:
             displayName: 'Use Python version'
 
           - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App : pfe-api'
             inputs:
-              azureSubscription: $(azureServiceConnectionId)
-              appName: $(webAppName)
-              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+              azureSubscription: 'Azure pour les étudiants (2a963393-399c-465f-856a-4b1c49c25b91)'
+              appType: 'webAppLinux'
+              appName: 'pfe-api'
+              package: '$(projectRoot)'
