@@ -89,4 +89,4 @@ stages:
               azureSubscription: 'Azure pour les étudiants (2a963393-399c-465f-856a-4b1c49c25b91)'
               appType: 'webAppLinux'
               appName: 'pfe-api'
-              package: '$(projectRoot)'
+              package: '$(projectRoot):**/*.zip'
