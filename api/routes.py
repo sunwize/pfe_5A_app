@@ -89,18 +89,19 @@ db = client.test
 
 @app.route('/insert', methods=['GET', 'POST'])
 def insertBDD():
-    my_json = request.get_data().decode('utf8').replace("'", '"')
-    data = json.loads(my_json)
-    post = dict()
-    post['mbti'] = data['mbti']
-    post['big5'] = data['bf']
-    print(my_json)
-    print(post)
-    print(data)
-    print('- ' * 20)
-    posts = db.posts
-    posts.insert_one(post).inserted_id
-    return post
+    print(request.get_data())
+    # my_json = request.get_data().decode('utf8').replace("'", '"')
+    # data = json.loads(my_json)
+    # post = dict()
+    # post['mbti'] = data['mbti']
+    # post['big5'] = data['bf']
+    # print(my_json)
+    # print(post)
+    # print(data)
+    # print('- ' * 20)
+    # posts = db.posts
+    # posts.insert_one(post).inserted_id
+    # return post
 
 @app.route('/get', methods=['GET', 'POST'])
 def getBDD():
