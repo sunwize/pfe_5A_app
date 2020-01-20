@@ -64,29 +64,9 @@ stages:
     - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       displayName: 'Upload package'
       artifact: drop
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
 
-- stage: Deploy
-  displayName: 'Deploy Web App'
-  dependsOn: Build
-  condition: succeeded()
-  jobs:
-  - deployment: DeploymentJob
-    pool:
-      vmImage: $(vmImageName)
-    environment: $(environmentName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          
-          - task: UsePythonVersion@0
-            inputs:
-              versionSpec: '$(pythonVersion)'
-            displayName: 'Use Python version'
-
-          - task: AzureWebApp@1
-            inputs:
-              azureSubscription: 'Azure pour les étudiants (2a963393-399c-465f-856a-4b1c49c25b91)'
-              appType: 'webAppLinux'
-              appName: 'pfe-api'
-              package: '$(projectRoot):**/*.zip'
