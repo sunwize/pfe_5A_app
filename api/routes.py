@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, jsonify, json, g
 from flask_cors import CORS, cross_origin
 import ast
 import pymongo
+import json
 ##########################################################################################################################
 ###################################                 ROUTES POUR LES                 ######################################
 ###################################                   PREDICTIONS                   ######################################
@@ -83,16 +84,20 @@ def donnerPersonnaliteQuizB5():
     return result
    
 #Gestion BDD
-client = pymongo.MongoClient("mongodb+srv://teddy:j9cnGtQYsCFLKOHX@cluster0-2heou.mongodb.net/test?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://teddy:GOULAGTV@cluster0-2heou.mongodb.net/test?retryWrites=true&w=majority")
 db = client.test
 
 @app.route('/insert', methods=['GET', 'POST'])
 def insertBDD():
-    data = json.loads(request.get_data())
+    my_json = request.get_data().decode('utf8').replace("'", '"')
+    data = json.loads(my_json)
     post = dict()
     post['mbti'] = data['mbti']
     post['big5'] = data['bf']
-    print(type(post))
+    print(my_json)
+    print(post)
+    print(data)
+    print('- ' * 20)
     posts = db.posts
     posts.insert_one(post).inserted_id
     return post
