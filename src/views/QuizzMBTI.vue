@@ -1,24 +1,26 @@
 <template>
     <div style="background-color: #567098">
       <b-container class="pt-3 pb-5">
-        <div v-for="(statement, index) in statements" :key="statement.text">
-          <div :ref="'mbti' + index">
-            <statement-mbti @click.native="scroll(index)" v-model="statement.choice" :text="statement.text" class="py-5"></statement-mbti>
-            <hr>
-          </div>
+        <h2 class="text-white pt-0 pb-3 py-lg-4">Quizz MBTI</h2>
+
+        <div v-if="quizzIndex < statements.length">
+          <hr>
+          <statement-mbti v-model="statements[quizzIndex].choice" :text="statements[quizzIndex].text" :on-answer="nextQuestion" class="py-5"></statement-mbti>
+          <hr>
         </div>
-        <b-button ref="test" @click="sendResults" class="mt-3" variant="info" size="lg" pill>Valider</b-button>
+        <div v-else>
+          <b-spinner v-if="loading" class="d-block m-auto" variant="light" label="Spinning"></b-spinner>
+
+          <b-row v-if="result && !loading">
+            <b-col cols="12" lg="3">
+              <personality :personality="result"></personality>
+            </b-col>
+            <b-col cols="12" lg="9">
+              <p class="text-justify text-white">{{ result.desc }}</p>
+            </b-col>
+          </b-row>
+        </div>
       </b-container>
-
-      <b-modal id="modal-mbti" title="MBTI Résultat" hide-footer>
-        <b-spinner v-if="loading" class="d-block m-auto" variant="light" label="Spinning"></b-spinner>
-
-        <div v-if="result && !loading">
-          <personality :personality="result"></personality>
-          <p class="text-justify">{{ result.desc }}</p>
-          <b-button @click="hideModal" class="float-right px-3" variant="info" pill>Ok</b-button>
-        </div>
-      </b-modal>
     </div>
 </template>
 
@@ -30,6 +32,7 @@ export default {
     return {
       loading: false,
       result: null,
+      quizzIndex: 0,
       statements: [ { text: 'Vous avez des difficultés à vous présenter à d’autres personnes.\n', choice: 4 },
                     { text: 'Vous êtes souvent si perdu(e) dans vos pensées que vous ignorez ou oubliez votre entourage.\n', choice: 4 },
                     { text: 'Vous essayez de répondre dès que possible à vos e-mails et ne supportez pas d’avoir une boîte de messagerie mal organisée.\n', choice: 4 },
@@ -96,15 +99,12 @@ export default {
   methods: {
     sendResults () {
       this.loading = true;
-      this.$bvModal.show('modal-mbti');
       let results = [];
 
       for (let statement of this.statements)
         results.push(statement.choice);
 
-      console.log(results);
       axios.post('http://localhost:5000/quizMbtiPrediction?liste=' + results).then(res => {
-        console.log(res);
         this.$store.commit('setMbtiResult', res.data);
         this.result = this.$store.getters.getPersonalities.filter(p => p.sigle.toLowerCase() === res.data.toLowerCase()).pop();
         this.loading = false;
@@ -114,17 +114,14 @@ export default {
         this.loading = false;
       });
     },
-    scroll(index) {
-      index++;
-      let next = 'mbti' + index;
-
-      if (!this.$refs[next])
-        return;
-
-      this.$refs[next][0].scrollIntoView({ behavior: 'smooth' });
-    },
-    hideModal() {
-      this.$bvModal.hide('modal-mbti');
+    nextQuestion() {
+      if (this.quizzIndex < this.statements.length-1) {
+        setTimeout(() => {
+          this.quizzIndex++;
+        }, 500);
+      } else {
+        this.sendResults();
+      }
     }
   }
 }

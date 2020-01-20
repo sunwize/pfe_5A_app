@@ -17,11 +17,15 @@
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+  @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
 
-#app {
-  font-family: 'Muli', sans-serif;
-  text-align: center;
-  color: #2c3e50;
-}
+  #app {
+    font-family: 'Muli', sans-serif;
+    text-align: center;
+    color: #2c3e50;
+  }
+
+  html {
+    background-color: rgb(86, 112, 152);
+  }
 </style>

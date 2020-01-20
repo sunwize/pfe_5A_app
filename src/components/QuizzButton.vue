@@ -21,13 +21,18 @@
       },
       computed: {
           style() {
-            return 'width: ' + 10 * this.size + 'px;'
-            + 'height: ' + 10 * this.size + 'px;'
+            return 'width: ' + this.width() * this.size + 'px;'
+            + 'height: ' + this.width() * this.size + 'px;'
             + 'border: 3px solid ' + this.color + ';'
             + this.plain;
           },
           plain() {
               return this.checked === true ? 'background-color: ' + this.color + ';' : '';
+          }
+      },
+      methods: {
+          width() {
+            return this.$store.getters.isMobileDevice ? 6 : 10;
           }
       }
     }
