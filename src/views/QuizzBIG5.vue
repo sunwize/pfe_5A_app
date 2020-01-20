@@ -117,7 +117,7 @@ export default {
 
         axios.post('http://localhost:5000/quizBig5Prediction?liste=' + results).then(res => {
           console.log(res);
-          this.$store.commit('setBfResult', res.data.sigle);
+          this.$store.commit('setBfResult', res.data.score);
           this.result = res.data.sigle;
           let score = res.data.score;
 

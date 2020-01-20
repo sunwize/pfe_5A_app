@@ -51,7 +51,7 @@ export default new Vuex.Store({
       state.result.mbti = mbti.toUpperCase();
     },
     setBfResult(state, bf) {
-      state.result.bf = bf.toUpperCase();
+      state.result.bf = bf;
     }
   },
   actions: {
