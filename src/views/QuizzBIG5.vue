@@ -1,22 +1,23 @@
 <template>
     <div style="background-color: #567098">
       <b-container class="pt-3 pb-5">
-        <div v-for="statement in statements" :key="statement.text">
-          <statement-bf v-model="statement.choice" :text="statement.text" class="py-5"></statement-bf>
+        <h2 class="text-white pt-0 pb-3 py-lg-4">Quizz Big Five</h2>
+
+        <div v-if="quizzIndex < statements.length">
+          <hr>
+          <statement-bf v-model="statements[quizzIndex].choice" :text="statements[quizzIndex].text" :on-answer="nextQuestion" class="py-5"></statement-bf>
           <hr>
         </div>
-        <b-button @click="sendResults" class="mt-3" variant="info" size="lg" pill>Valider</b-button>
-      </b-container>
 
-      <b-modal id="modal-bf" title="Big Five Résultat" size="lg" hide-footer>
-        <b-spinner v-if="loading" class="d-block m-auto" variant="light" label="Spinning"></b-spinner>
+        <div v-else>
+          <b-spinner v-if="loading" class="d-block m-auto" variant="light" label="Spinning"></b-spinner>
 
-        <div v-if="result && !loading">
-          <h3 class="text-center">{{ result }}</h3>
-          <horizontal-bars :chartdata="chartdata" :options="options"/>
-          <b-button @click="hideModal" class="float-right px-3" variant="info" pill>Ok</b-button>
+          <div v-if="result && !loading">
+            <h3 class="text-center text-white">{{ result }}</h3>
+            <horizontal-bars :chartdata="chartdata" :options="options"/>
+          </div>
         </div>
-      </b-modal>
+      </b-container>
     </div>
 </template>
 
@@ -28,6 +29,7 @@ export default {
     return {
       loading: false,
       result: '',
+      quizzIndex: 0,
       statements: [ { text: 'Je suis un gros fêtard.\n', choice: 3 },
                     { text: 'Je me soucie peu des autres.\n', choice: 3 },
                     { text: 'Je suis toujours prêt.\n', choice: 3 },
@@ -111,12 +113,9 @@ export default {
   methods: {
     sendResults () {
         this.loading = true;
-        this.$bvModal.show('modal-bf');
         let results = this.statements.map(s => s.choice);
-        console.log(results);
 
         axios.post('http://localhost:5000/quizBig5Prediction?liste=' + results).then(res => {
-          console.log(res);
           this.$store.commit('setBfResult', res.data.score);
           this.result = res.data.sigle;
           let score = res.data.score;
@@ -146,8 +145,14 @@ export default {
           this.loading = false;
         });
     },
-    hideModal() {
-      this.$bvModal.hide('modal-bf');
+    nextQuestion() {
+      if (this.quizzIndex < this.statements.length-1) {
+        setTimeout(() => {
+          this.quizzIndex++;
+        }, 500);
+      } else {
+        this.sendResults();
+      }
     }
   }
 }

@@ -44,6 +44,9 @@ export default new Vuex.Store({
     },
     getPersonalities(state) {
       return state.personalities;
+    },
+    isMobileDevice() {
+      return window.innerWidth < 1000;
     }
   },
   mutations: {

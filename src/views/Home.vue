@@ -2,18 +2,18 @@
   <div class="background">
     <b-container class="header" fluid>
       <b-container>
-        <h2 class="m-auto py-3 text-left">Your personality</h2>
-        <h3 class="text-left">Describe yourself:</h3>
+        <h2 class="m-auto py-3 text-left">Analyse textuelle</h2>
+        <h3 class="text-left">Décrivez-vous en quelques lignes :</h3>
         <b-form-textarea
           id="textarea"
           v-model="text"
-          placeholder="Enter something..."
+          placeholder="..."
           rows="3"
           max-rows="6"
         ></b-form-textarea>
         <div class="text-right pb-3">
           <form @submit.prevent="sendText">
-            <b-button type="submit" variant="primary" class="mt-2">Envoyer</b-button>
+            <b-button type="submit" variant="primary" class="mt-2">Analyser</b-button>
           </form>
         </div>
         <div v-if="result" class="text-left pb-2">

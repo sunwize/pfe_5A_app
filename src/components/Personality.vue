@@ -1,6 +1,6 @@
 <template>
-  <b-card>
-    <h4>{{ personality.title }}</h4>
+  <b-card class="text-white">
+    <h4 :style="'font-size: ' + (isMobileDevice() ? '1.2em' : '')">{{ personality.title }}</h4>
     <p>{{ personality.sigle }}</p>
     <b-img class="icon m-auto" :src="require(`../assets/img/logos/${personality.img}.svg`)"></b-img>
   </b-card>
@@ -13,6 +13,11 @@
       personality: {
         type: Object,
         required: true
+      }
+    },
+    methods: {
+      isMobileDevice() {
+        return this.$store.getters.isMobileDevice;
       }
     }
   }
