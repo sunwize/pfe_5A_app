@@ -84,35 +84,26 @@ def donnerPersonnaliteQuizB5():
     return result
    
 #Gestion BDD
-client = pymongo.MongoClient("mongodb+srv://teddy:GOULAGTV@cluster0-2heou.mongodb.net/test?retryWrites=true&w=majority")
-db = client.test
+client = pymongo.MongoClient("mongodb+srv://teddy:GOULAGTV@cluster0-2heou.mongodb.net/Big5Mbti?retryWrites=true&w=majority")
+db = client.Big5Mbti
 
 @app.route('/insert', methods=['GET', 'POST'])
 def insertBDD():
-    print(request.get_data())
-    # my_json = request.get_data().decode('utf8').replace("'", '"')
-    # data = json.loads(my_json)
-    # post = dict()
-    # post['mbti'] = data['mbti']
-    # post['big5'] = data['bf']
-    # print(my_json)
-    # print(post)
-    # print(data)
-    # print('- ' * 20)
-    # posts = db.posts
-    # posts.insert_one(post).inserted_id
-    # return post
+    my_json = request.get_data().decode('utf8').replace("'", '"')
+    data = json.loads(my_json)
+    comparaison = dict()
+    comparaison['mbti'] = data['mbti']
+    comparaison['big5'] = data['bf']
+    print(my_json)
+    print(comparaison)
+    print(data)
+    print('- ' * 20)
+    personnalityBig5Mbti=db.personnalityBig5Mbti 
+    personnalityBig5Mbti.insert_one(comparaison).inserted_id
+    return "ok2"
 
 @app.route('/get', methods=['GET', 'POST'])
 def getBDD():
-    data = request.args.get('liste')
-    data='['+data+']'
-    data=ast.literal_eval(data)
-    get = {
-         "mbti": data[0],
-         "big5": data[1],
-         }
-
-    posts = db.posts
-    result = posts.find_one(get)
+    personnalityBig5Mbti=db.personnalityBig5Mbti 
+    result = personnalityBig5Mbti.find({})
     return result
