@@ -68,7 +68,7 @@ def donnerPersonnaliteQuiz():
 
     y=df.Personnalite
     x=df.drop(['Reponses', 'Personnalite' ],axis=1)
-    entrainementQuiz(x,y)
+    #entrainementQuiz(x,y)
     Personnalite = predictionQuiz(model="model/models_quiz/model_quiz_mbti.sav", x=input)
     print(Personnalite)
     return Personnalite[0]
