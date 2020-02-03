@@ -62,7 +62,7 @@ export default new Vuex.Store({
       if (state.result.sent === true || !state.result.mbti || !state.result.bf)
         return;
 
-      axios.post('http://localhost:5000/insert', {
+      axios.post(process.env.VUE_APP_API_URL + '/insert', {
         mbti: state.result.mbti,
         bf: state.result.bf
       }).then(res => {

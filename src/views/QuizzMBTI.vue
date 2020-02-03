@@ -104,7 +104,7 @@ export default {
       for (let statement of this.statements)
         results.push(statement.choice);
 
-      axios.post('http://localhost:5000/quizMbtiPrediction?liste=' + results).then(res => {
+      axios.post(process.env.VUE_APP_API_URL + '/quizMbtiPrediction?liste=' + results).then(res => {
         this.$store.commit('setMbtiResult', res.data);
         this.result = this.$store.getters.getPersonalities.filter(p => p.sigle.toLowerCase() === res.data.toLowerCase()).pop();
         this.loading = false;

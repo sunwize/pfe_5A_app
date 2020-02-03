@@ -115,7 +115,7 @@ export default {
         this.loading = true;
         let results = this.statements.map(s => s.choice);
 
-        axios.post('http://localhost:5000/quizBig5Prediction?liste=' + results).then(res => {
+        axios.post(process.env.VUE_APP_API_URL + '/quizBig5Prediction?liste=' + results).then(res => {
           this.$store.commit('setBfResult', res.data.score);
           this.result = res.data.sigle;
           let score = res.data.score;

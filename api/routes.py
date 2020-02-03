@@ -12,19 +12,24 @@ import json
 ###################################                   PREDICTIONS                   ######################################
 ##########################################################################################################################
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder = "./dist", template_folder = "./dist", static_url_path="")
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
 
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+	return render_template('index.html')
+
 @app.route('/textPrediction', methods=['GET', 'POST'])
 def donnerPersonnalite():
-    print("test predict") 
+    print("test predict")
     data = request.args.get('text')
     df = pd.read_csv("dataset/mbti_1.csv")
     load_data(df)
     #entrainement(output_dir="./model")
-    #f = open("text.txt", "r") 
+    #f = open("text.txt", "r")
     js = prediction(model="./model", text=data)
 
     INTRO="E"
@@ -34,13 +39,13 @@ def donnerPersonnalite():
 
     if js["INTROVERTED"] >= 0.5:
         INTRO="I"
-    
+
     if js["INTUTIVE"] >= 0.5:
         INTUITION="N"
-    
+
     if js["JUDGEMENTAL"] >= 0.5:
         JUGEMENT="J"
-    
+
     if js["THINKING"] >= 0.5:
         REFLEXION="T"
 
@@ -59,11 +64,11 @@ def donnerPersonnaliteQuiz():
     #Chargement dataset
     df = pd.read_csv('dataset/dataset_mbti_quiz.csv', names=['Personnalite', 'Reponses'])
 
-    # Nombre de ligne par personnalité 
+    # Nombre de ligne par personnalité
     #print(df.groupby('Personnalite').count())
     for i in range(len(df)):
           df['Reponses'][i] = ast.literal_eval(df['Reponses'][i])
-    
+
     df[['q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10', 'q11', 'q12', 'q13', 'q14', 'q15', 'q16', 'q17', 'q18', 'q19', 'q20', 'q21', 'q22', 'q23', 'q24', 'q25', 'q26', 'q27', 'q28', 'q29', 'q30', 'q31', 'q32', 'q33', 'q34', 'q35', 'q36', 'q37', 'q38', 'q39', 'q40', 'q41', 'q42', 'q43', 'q44', 'q45', 'q46', 'q47', 'q48', 'q49', 'q50', 'q51', 'q52', 'q53', 'q54', 'q55', 'q56', 'q57', 'q58', 'q59']] = pd.DataFrame(df.Reponses.values.tolist(), index= df.index)
 
     y=df.Personnalite
@@ -82,7 +87,7 @@ def donnerPersonnaliteQuizB5():
 
     result = calculScoreBigFive(data)
     return result
-   
+
 #Gestion BDD
 client = pymongo.MongoClient("mongodb+srv://teddy:GOULAGTV@cluster0-2heou.mongodb.net/Big5Mbti?retryWrites=true&w=majority")
 db = client.Big5Mbti
@@ -98,7 +103,7 @@ def insertBDD():
     print(comparaison)
     print(data)
     print('- ' * 20)
-    personnalityBig5Mbti=db.personnalityBig5Mbti 
+    personnalityBig5Mbti=db.personnalityBig5Mbti
     personnalityBig5Mbti.insert_one(comparaison).inserted_id
     return "ok2"
 
@@ -106,11 +111,11 @@ def insertBDD():
 
 @app.route('/get', methods=['GET', 'POST'])
 def getBDD():
-    personnalityBig5Mbti=db.personnalityBig5Mbti 
+    personnalityBig5Mbti=db.personnalityBig5Mbti
     result = personnalityBig5Mbti.find()
     result=str(list(result))
-    
-  
+
+
     # # create an empty DataFrame obj for storing Series objects
     # docs = pd.DataFrame(columns=[])
     # # iterate over the list of MongoDB dict documents
