@@ -1,5 +1,4 @@
 from bson import ObjectId, json_util
-
 from fonctions import load_data, prediction, entrainementQuiz, predictionQuiz, calculScoreBigFive
 import pandas as pd
 from flask import Flask, render_template, request, jsonify, json, g
@@ -7,6 +6,7 @@ from flask_cors import CORS, cross_origin
 import ast
 import pymongo
 import json
+
 ##########################################################################################################################
 ###################################                 ROUTES POUR LES                 ######################################
 ###################################                   PREDICTIONS                   ######################################
@@ -68,7 +68,7 @@ def donnerPersonnaliteQuiz():
 
     y=df.Personnalite
     x=df.drop(['Reponses', 'Personnalite' ],axis=1)
-    entrainementQuiz(x,y)
+    #entrainementQuiz(x,y)
     Personnalite = predictionQuiz(model="model/models_quiz/model_quiz_mbti.sav", x=input)
     print(Personnalite)
     return Personnalite[0]
@@ -102,8 +102,29 @@ def insertBDD():
     personnalityBig5Mbti.insert_one(comparaison).inserted_id
     return "ok2"
 
+
+
 @app.route('/get', methods=['GET', 'POST'])
 def getBDD():
     personnalityBig5Mbti=db.personnalityBig5Mbti 
-    result = personnalityBig5Mbti.find({})
+    result = personnalityBig5Mbti.find()
+    result=str(list(result))
+    
+  
+    # # create an empty DataFrame obj for storing Series objects
+    # docs = pd.DataFrame(columns=[])
+    # # iterate over the list of MongoDB dict documents
+    # mongo_docs = list(result)
+    # for num, doc in enumerate(mongo_docs):
+    #     # convert ObjectId() to str
+    #     doc["_id"] = str(doc["_id"])
+    #     # get document _id from dict
+    #     doc_id = doc["_id"]
+    #     # create a Series obj from the MongoDB dict
+    #     series_obj = pd.Series(doc, name=doc_id)
+
+    #     # append the MongoDB Series obj to the DataFrame obj
+    #     docs = docs.append(series_obj)
+
+
     return result
