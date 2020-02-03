@@ -8,7 +8,7 @@ pandas==0.25.1
 pathlib==1.0.1
 pickleshare==0.7.5
 plotly==4.1.1
-pymongo==3.9.0
+pymongo==3.10.1
 requests==2.22.0
 scikit-learn==0.21.3
 Scrapy==1.8.0
@@ -20,3 +20,7 @@ urllib3==1.25.6
 dnspython==1.16.0
 bson==0.5.8
 gunicorn
+numpy==1.17.2
+thinc==7.3.1
+pickleshare==0.7.5
+astroid==2.3.0
