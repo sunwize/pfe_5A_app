@@ -7,6 +7,7 @@ import '../public/scss/global.scss'
 import BootstrapVue from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import QuizzStatementMBTI from './components/QuizzStatementMBTI'
@@ -17,7 +18,7 @@ import HorizontalBars from './components/HorizontalBars'
 
 Vue.config.productionTip = false
 
-library.add(fas)
+library.add(fas, fab)
 
 Vue.use(BootstrapVue)
 

@@ -14,7 +14,7 @@
               <h4 class="text-dark">Articles</h4>
               <b-list-group class="text-left">
                 <b-list-group-item v-for="source in sources" :key="source.link" :href="source.link">
-                  <icon class="mr-1" :icon="source.icon"></icon> {{ source.title }}
+                  <icon style="width: 20px" class="mr-1" :icon="source.icon"></icon> {{ source.title }}
                 </b-list-group-item>
               </b-list-group>
             </b-card>
@@ -32,9 +32,13 @@
         sources: [
           { title: 'Le site des 16 personnalités', icon: 'globe-europe', link: 'https://www.16personalities.com/fr/types-de-personnalite' },
           { title: 'Similar minds', icon: 'globe-europe', link: 'http://similarminds.com/global5/g5-jung.html' },
-          { title: 'Predict your Myers-Briggs Personality', icon: 'globe-europe', link: 'https://www.kaggle.com/stefanbergstein/byo-tweets-predict-your-myers-briggs-personality' },
           { title: 'Training AI to Predict MBTI From Texts', icon: 'globe-europe', link: 'https://medium.com/towards-artificial-intelligence/training-ai-to-predict-myers-briggs-personality-types-from-texts-d4e3d7baf17' },
-          { title: 'Personality detection', icon: 'github', link: 'https://github.com/SenticNet/personality-detection' },
+          { title: 'XGBoost in Python', icon: 'globe-europe', link: 'https://machinelearningmastery.com/xgboost-python-mini-course/' },
+          { title: 'Personality detection', icon: ['fab', 'github'], link: 'https://github.com/SenticNet/personality-detection' },
+          { title: 'Scrappy with Selenium', icon: ['fab', 'github'], link: 'https://github.com/clemfromspace/scrapy-selenium' },
+          { title: 'MBTI CNN based text classifier', icon: ['fab', 'github'], link: 'https://github.com/Neoanarika/MBTI?fbclid=IwAR1uXjPAhxXWrRX4_WxJigK3EGrY3URRhBr0-ocpzB4fgg9rSrGGZP0jQ54' },
+          { title: 'Kaggle Dataset', icon: ['fab', 'kaggle'], link: 'https://www.kaggle.com/datasnaek/mbti-type' },
+          { title: 'Kaggle : Predict your Myers-Briggs Personality', icon: ['fab', 'kaggle'], link: 'https://www.kaggle.com/stefanbergstein/byo-tweets-predict-your-myers-briggs-personality' },
         ]
       }
     }
