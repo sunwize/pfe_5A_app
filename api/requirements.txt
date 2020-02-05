@@ -12,7 +12,6 @@ pymongo==3.10.1
 requests==2.22.0
 scikit-learn==0.21.3
 Scrapy==1.8.0
-selenium==3.141.0
 soupsieve==1.9.5
 spacy==2.2.3
 typed-ast==1.4.0
