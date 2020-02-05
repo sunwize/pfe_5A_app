@@ -3,7 +3,7 @@
     <b-container class="header" fluid>
       <b-container>
         <h2 class="m-auto py-3 text-left">Analyse textuelle</h2>
-        <h3 class="text-left">Décrivez-vous en quelques lignes :</h3>
+        <h3 class="text-left">Décrivez-vous en quelques lignes en ANGLAIS :</h3>
         <b-form-textarea
           id="textarea"
           v-model="text"
@@ -13,7 +13,7 @@
         ></b-form-textarea>
         <div class="text-right pb-3">
           <form @submit.prevent="sendText">
-            <b-button type="submit" variant="primary" class="mt-2">Analyser</b-button>
+            <b-button type="submit" variant="outline-light" class="mt-2">Analyser</b-button>
           </form>
         </div>
         <div v-if="result" class="text-left pb-2">
@@ -26,6 +26,7 @@
         </b-container>
     </b-container>
     <b-container class="pt-3">
+      <h3 class="text-left mb-3">16 Types de personnalitées</h3>
       <b-row>
         <b-col cols="6" md="3" v-for="personality in personalities" :key="personality.title">
           <personality @click.native="openModal(personality)" :personality="personality" class="personality"></personality>

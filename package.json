@@ -25,6 +25,7 @@
     "vuex-persist": "^2.2.0"
   },
   "devDependencies": {
+    "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@vue/cli-plugin-babel": "^4.0.0",
     "@vue/cli-plugin-eslint": "^4.0.0",
     "@vue/cli-service": "^4.0.0",

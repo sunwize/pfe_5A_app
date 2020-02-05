@@ -3,7 +3,8 @@
       <b-container class="pt-3 pb-5">
         <h2 class="text-white pt-0 pb-3 py-lg-4">Quizz MBTI</h2>
 
-        <div v-if="quizzIndex < statements.length">
+        <div v-if="quizzIndex < statements.length && !loading && !result">
+          <h3 class="text-right">{{ quizzIndex+1 }} / {{ statements.length }}</h3>
           <hr>
           <statement-mbti v-model="statements[quizzIndex].choice" :text="statements[quizzIndex].text" :on-answer="nextQuestion" class="py-5"></statement-mbti>
           <hr>
@@ -96,6 +97,11 @@ export default {
       ]
     }
   },
+  mounted () {
+    let result = this.$store.getters.getMbtiResult;
+    if (result)
+      this.result = this.$store.getters.getPersonalities.filter(p => p.sigle.toLowerCase() === result.toLowerCase()).pop();
+  },
   methods: {
     sendResults () {
       this.loading = true;
@@ -107,6 +113,7 @@ export default {
       axios.post(process.env.VUE_APP_API_URL + '/quizMbtiPrediction?liste=' + results).then(res => {
         this.$store.commit('setMbtiResult', res.data);
         this.result = this.$store.getters.getPersonalities.filter(p => p.sigle.toLowerCase() === res.data.toLowerCase()).pop();
+        console.log(this.result);
         this.loading = false;
         this.$store.dispatch('sendProfileToDB');
       }).catch(err => {
@@ -115,13 +122,11 @@ export default {
       });
     },
     nextQuestion() {
-      if (this.quizzIndex < this.statements.length-1) {
-        setTimeout(() => {
-          this.quizzIndex++;
-        }, 500);
-      } else {
-        this.sendResults();
-      }
+      setTimeout(() => {
+        this.quizzIndex++;
+        if (this.quizzIndex === this.statements.length)
+          this.sendResults();
+      }, 300);
     }
   }
 }

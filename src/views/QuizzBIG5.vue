@@ -3,7 +3,8 @@
       <b-container class="pt-3 pb-5">
         <h2 class="text-white pt-0 pb-3 py-lg-4">Quizz Big Five</h2>
 
-        <div v-if="quizzIndex < statements.length">
+        <div v-if="quizzIndex < statements.length && !loading && !result">
+          <h3 class="text-right">{{ quizzIndex+1 }} / {{ statements.length }}</h3>
           <hr>
           <statement-bf v-model="statements[quizzIndex].choice" :text="statements[quizzIndex].text" :on-answer="nextQuestion" class="py-5"></statement-bf>
           <hr>
@@ -12,8 +13,8 @@
         <div v-else>
           <b-spinner v-if="loading" class="d-block m-auto" variant="light" label="Spinning"></b-spinner>
 
-          <div v-if="result && !loading">
-            <h3 class="text-center text-white">{{ result }}</h3>
+          <div v-if="!loading && result">
+            <h3 class="text-white" v-if="false">{{ result.sigle }}</h3>
             <horizontal-bars :chartdata="chartdata" :options="options"/>
           </div>
         </div>
@@ -28,7 +29,7 @@ export default {
   data () {
     return {
       loading: false,
-      result: '',
+      result: null,
       quizzIndex: 0,
       statements: [ { text: 'Je suis un gros fêtard.\n', choice: 3 },
                     { text: 'Je me soucie peu des autres.\n', choice: 3 },
@@ -82,7 +83,7 @@ export default {
                     { text: 'J\'ai beaucoup d\'idées.\n', choice: 3 }
       ],
       chartdata: {
-        labels: ['L\'ouverture à l\'expérience', 'La conscienciosité', 'L\'extraversion', 'L\'agréabilité', 'Le névrosisme'],
+        labels: ['Ouverture', 'Conscienciosité', 'Extraversion', 'Agréabilité', 'Névrosisme'],
         datasets: [
           {
             label: '',
@@ -110,15 +111,36 @@ export default {
       }
     }
   },
+  mounted () {
+    this.result = this.$store.getters.getBfResult;
+    if (!this.result)
+      return;
+    this.chartdata = {
+      labels: ['Ouverture', 'Conscienciosité', 'Extraversion', 'Agréabilité', 'Névrosisme'],
+      datasets: [
+        {
+          borderColor: 'red',
+          label: 'Big Five',
+          backgroundColor: [
+            '#32f871',
+            '#f87979',
+            '#bc9bf8',
+            '#7c92f8',
+            '#f89946'
+          ],
+          data: [this.result.score.O * 100/40, this.result.score.C * 100/40, this.result.score.E * 100/40, this.result.score.A * 100/40, this.result.score.N * 100/40]
+        }
+      ]
+    };
+  },
   methods: {
     sendResults () {
         this.loading = true;
         let results = this.statements.map(s => s.choice);
 
         axios.post(process.env.VUE_APP_API_URL + '/quizBig5Prediction?liste=' + results).then(res => {
-          this.$store.commit('setBfResult', res.data.score);
-          this.result = res.data.sigle;
-          let score = res.data.score;
+          this.$store.commit('setBfResult', res.data);
+          this.result = res.data;
 
           this.chartdata = {
            labels: ['Ouverture', 'Conscienciosité', 'Extraversion', 'Agréabilité', 'Névrosisme'],
@@ -133,7 +155,7 @@ export default {
                  '#7c92f8',
                  '#f89946'
                ],
-               data: [score.O * 100/40, score.C * 100/40, score.E * 100/40, score.A * 100/40, score.N * 100/40]
+               data: [this.result.score.O * 100/40, this.result.score.C * 100/40, this.result.score.E * 100/40, this.result.score.A * 100/40, this.result.score.N * 100/40]
              }
            ]
           };
@@ -146,13 +168,11 @@ export default {
         });
     },
     nextQuestion() {
-      if (this.quizzIndex < this.statements.length-1) {
-        setTimeout(() => {
-          this.quizzIndex++;
-        }, 500);
-      } else {
-        this.sendResults();
-      }
+      setTimeout(() => {
+        this.quizzIndex++;
+        if (this.quizzIndex === this.statements.length)
+          this.sendResults();
+      }, 300);
     }
   }
 }
