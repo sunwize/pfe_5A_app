@@ -11,10 +11,10 @@
           </b-col>
           <b-col cols="12" lg="6" class="mt-3 mt-lg-0">
             <b-card>
-              <h4 class="text-dark">Articles</h4>
+              <h4 class="text-dark mb-3">Articles</h4>
               <b-list-group class="text-left">
                 <b-list-group-item v-for="source in sources" :key="source.link" :href="source.link">
-                  <icon style="width: 20px" class="mr-1" :icon="source.icon"></icon> {{ source.title }}
+                  <icon style="width: 20px" class="mr-1" :icon="source.icon"></icon> <span>{{ source.title }}</span>
                 </b-list-group-item>
               </b-list-group>
             </b-card>
@@ -37,8 +37,8 @@
           { title: 'Personality detection', icon: ['fab', 'github'], link: 'https://github.com/SenticNet/personality-detection' },
           { title: 'Scrappy with Selenium', icon: ['fab', 'github'], link: 'https://github.com/clemfromspace/scrapy-selenium' },
           { title: 'MBTI CNN based text classifier', icon: ['fab', 'github'], link: 'https://github.com/Neoanarika/MBTI?fbclid=IwAR1uXjPAhxXWrRX4_WxJigK3EGrY3URRhBr0-ocpzB4fgg9rSrGGZP0jQ54' },
-          { title: 'Kaggle Dataset', icon: ['fab', 'kaggle'], link: 'https://www.kaggle.com/datasnaek/mbti-type' },
-          { title: 'Kaggle : Predict your Myers-Briggs Personality', icon: ['fab', 'kaggle'], link: 'https://www.kaggle.com/stefanbergstein/byo-tweets-predict-your-myers-briggs-personality' },
+          { title: 'Dataset', icon: ['fab', 'kaggle'], link: 'https://www.kaggle.com/datasnaek/mbti-type' },
+          { title: 'Predict your Myers-Briggs Personality', icon: ['fab', 'kaggle'], link: 'https://www.kaggle.com/stefanbergstein/byo-tweets-predict-your-myers-briggs-personality' },
         ]
       }
     }
@@ -56,12 +56,12 @@
     width: 100%;
   }
 
-  a {
-    &:hover {
+  a:hover {
+    span {
       text-decoration: underline;
-      color: white;
-      background: #007bff;
-      border-color: #007bff;
     }
+    color: white;
+    background: #007bff;
+    border-color: #007bff;
   }
 </style>

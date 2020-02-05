@@ -59,7 +59,7 @@ def load_data(train_data,limit=0, split=0.8):
         if y_[3] == 'J' : JUDGEMENTAL=  True
         else: JUDGEMENTAL=  False
         y.append({'INTROVERTED':INTROVERTED,"INTUTIVE":INTUTIVE,"THINKING":THINKING,"JUDGEMENTAL":JUDGEMENTAL})
-            
+
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split, random_state=42)
     return (X_train, y_train), (X_test, y_test)
 
@@ -143,7 +143,7 @@ def entrainement(model=None, output_dir=None, n_iter=20, n_texts=2000):
             print('{0:.3f}\t{1:.3f}\t{2:.3f}\t{3:.3f}'  # print a simple table
                 .format(losses['textcat'], scores['textcat_p'],
                         scores['textcat_r'], scores['textcat_f']))
-        
+
 
 def prediction(model=None, text=None):
     # test the trained model
@@ -187,7 +187,7 @@ def evaluateQuizModels(x=None,y=None):
 
 def entrainementQuiz(x=None, y=None,sample_size=0.3):
     # TEST DES MODELS
-    # # UTILISATION DU MODEL 
+    # # UTILISATION DU MODEL
     x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=sample_size)
     alg = MLPClassifier(solver='lbfgs', random_state=0)
     alg.fit(x_train, y_train)
@@ -224,9 +224,9 @@ def calculScoreBigFive(tabR=None):
     # Accommodating ou Egocentric (dimension Agréabilité)
     # Non-curious ou Inquisitive (dimension Ouverture)
     lScore = [[E, "S", "R"], [N, "L", "C"], [C, "O", "U"], [A, "A", "E"], [O, "N", "I"]]
-    
+
     for Score, trait1, trait2 in lScore:
-        if Score >= 50:
+        if Score >= 20:
             SigleBIG5 = SigleBIG5 + trait1
         else:
             SigleBIG5 = SigleBIG5 + trait2
