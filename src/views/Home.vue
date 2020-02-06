@@ -26,7 +26,35 @@
         </b-container>
     </b-container>
     <b-container class="pt-3">
-      <h3 class="text-left mb-3">16 Types de personnalitées</h3>
+      <h3 class="text-left mb-3">Les traits de personnalités Big Five</h3>
+      <b-row>
+        <b-col cols="12" lg="6">
+          <b-card title="Ouverture" class="trait">
+            <span>Appréciation de l'art, de l'émotion, de l'aventure, des idées peu communes ou des idées nouvelles, curiosité et imagination</span>
+          </b-card>
+        </b-col>
+        <b-col cols="12" lg="6">
+          <b-card title="Conscienciosité" class="trait">
+            <span>Autodiscipline, respect des obligations, organisation plutôt que spontanéité ; orienté vers des buts</span>
+          </b-card>
+        </b-col>
+        <b-col cols="12" lg="6">
+          <b-card title="Extraversion" class="trait">
+            <span>Energie, émotions positives, tendance à chercher la stimulation et la compagnie des autres</span>
+          </b-card>
+        </b-col>
+        <b-col cols="12" lg="6">
+          <b-card title="Agréabilité" class="trait">
+            <span>Une tendance à être compatissant et coopératif plutôt que soupçonneux et antagonique envers les autres</span>
+          </b-card>
+        </b-col>
+        <b-col cols="12" lg="6">
+          <b-card title="Névrosisme" class="trait">
+            <span>Contraire de stabilité émotionnelle : tendance à éprouver facilement des émotions désagréables comme la colère, l'inquiétude ou la dépression, vulnérabilité</span>
+          </b-card>
+        </b-col>
+      </b-row>
+      <h3 class="text-left mb-3">Types de personnalitées selon MBTI</h3>
       <b-row>
         <b-col cols="6" md="3" v-for="personality in personalities" :key="personality.title">
           <personality @click.native="openModal(personality)" :personality="personality" class="personality"></personality>
@@ -123,5 +151,13 @@ export default {
 
   .footer {
     background: rgba(46, 68, 91, 0.73);
+  }
+
+  .trait {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.25);
+    text-align: left;
+    border: none;
+    margin-bottom: 1em;
   }
 </style>

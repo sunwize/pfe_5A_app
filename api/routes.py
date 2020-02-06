@@ -111,10 +111,11 @@ def insertBDD():
 
 @app.route('/get', methods=['GET', 'POST'])
 def getBDD():
-    personnalityBig5Mbti=db.personnalityBig5Mbti
-    result = personnalityBig5Mbti.find()
-    result=str(list(result))
-
+    personnalityBig5Mbti = db.personnalityBig5Mbti
+    result = personnalityBig5Mbti.find({}, { "_id": 0, "mbti": 1, "big5": 1 })
+    result = list(result)
+    d = dict()
+    d["data"] = result
 
     # # create an empty DataFrame obj for storing Series objects
     # docs = pd.DataFrame(columns=[])
@@ -132,4 +133,4 @@ def getBDD():
     #     docs = docs.append(series_obj)
 
 
-    return result
+    return d
