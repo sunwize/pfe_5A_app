@@ -40,7 +40,7 @@ export default {
       { text: 'Vos itinéraires de voyage sont généralement planifiés à l’avance.\n', choice: 4 },
       { text: 'Vous pensez souvent à ce que vous auriez dû dire dans une conversation après qu elle a eu lieu.\n', choice: 4 },
       { text: 'Si vos amis sont vraiment tristes à propos d’une situation, vous êtes plus susceptible de leur offrir un soutien émotionnel que de leur suggérer des solutions au problème.\n', choice: 4 },
-      { text: 'Les gens peuvent rarement vous déranger.\n', choice: 4 }
+      { text: 'Les gens peuvent rarement vous déranger.\n', choice: 4 },
       { text: 'Habituellement, vous ne lancez pas les conversations.\n', choice: 4 },
       { text: 'Être capable de développer un plan et de s’y tenir est la partie la plus importante de chaque projet.\n', choice: 4 },
       { text: 'Vous vous inquiétez rarement si vous avez fait bonne impression sur quelqu un que vous avez rencontré.\n', choice: 4 },
