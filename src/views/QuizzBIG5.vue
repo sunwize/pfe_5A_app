@@ -4,7 +4,12 @@
         <h2 class="text-white pt-0 pb-3 py-lg-4">Quizz Big Five</h2>
 
         <div v-if="quizzIndex < statements.length && !loading && !result">
-          <h3 class="text-right">{{ quizzIndex+1 }} / {{ statements.length }}</h3>
+          <h3 class="d-flex">
+            <div class="w-50 text-left">
+              <b-button @click="previousQuestion" variant="outline-dark" pill><icon icon="arrow-left"></icon></b-button>
+            </div>
+            <div class="w-50 text-right">{{ quizzIndex+1 }} / {{ statements.length }}</div>
+          </h3>
           <hr>
           <statement-bf v-model="statements[quizzIndex].choice" :text="statements[quizzIndex].text" :on-answer="nextQuestion" class="py-5"></statement-bf>
           <hr>
@@ -14,8 +19,9 @@
           <b-spinner v-if="loading" class="d-block m-auto" variant="light" label="Spinning"></b-spinner>
 
           <div v-if="!loading && result">
-            <h3 class="text-white" v-if="false">{{ result.sigle }}</h3>
+            <h3 class="text-white">{{ result.sigle }}</h3>
             <horizontal-bars :chartdata="chartdata" :options="options"/>
+            <b-button @click="restart" class="mt-3" variant="outline-light"><icon icon="redo-alt"></icon> Recommencer</b-button>
           </div>
         </div>
       </b-container>
@@ -173,6 +179,14 @@ export default {
         if (this.quizzIndex === this.statements.length)
           this.sendResults();
       }, 300);
+    },
+    previousQuestion() {
+      if (this.quizzIndex > 0)
+        this.quizzIndex--;
+    },
+    restart() {
+      this.$store.commit('setBfResult', null);
+      this.$router.go();
     }
   }
 }

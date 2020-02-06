@@ -13,8 +13,7 @@ export default new Vuex.Store({
   state: {
     result: {
       mbti: null,
-      bf: null,
-      sent: false
+      bf: null
     },
     personalities: [
       { title: 'Architecte', desc: 'On se sent seul en haut et, comme ils sont un des types de personnalité les plus rares et les plus capables sur le plan stratégique, les Architectes ne le savent que trop bien. Les Architectes forment juste deux pourcent de la population et les femmes de ce type de personnalité sont particulièrement rares, car elles ne forment que 0,8 % de la population. Pour les Architectes, il est souvent difficile de trouver des individus de même sensibilité qui soient capables de suivre leur implacable intellectualisme et leurs manoeuvres de joueurs d’échec. Les gens qui ont le type de personnalité « Architecte » sont imaginatifs mais catégoriques, ambitieux et pourtant secrets, étonnamment curieux, mais ils ne gaspillent pas leur énergie.', img: 'intj-architect', sigle: 'INTJ' },
@@ -59,7 +58,7 @@ export default new Vuex.Store({
   },
   actions: {
     sendProfileToDB({ state }) {
-      if (state.result.sent === true || !state.result.mbti || !state.result.bf)
+      if (!state.result.mbti || !state.result.bf)
         return;
 
       axios.post(process.env.VUE_APP_API_URL + '/insert', {
@@ -67,7 +66,6 @@ export default new Vuex.Store({
         bf: state.result.bf
       }).then(res => {
         console.log(res);
-        state.result.sent = true;
       }).catch(err => {
         console.log(err);
       });

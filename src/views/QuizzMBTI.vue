@@ -4,7 +4,12 @@
         <h2 class="text-white pt-0 pb-3 py-lg-4">Quizz MBTI</h2>
 
         <div v-if="quizzIndex < statements.length && !loading && !result">
-          <h3 class="text-right">{{ quizzIndex+1 }} / {{ statements.length }}</h3>
+          <h3 class="d-flex">
+            <div class="w-50 text-left">
+              <b-button @click="previousQuestion" variant="outline-dark" pill><icon icon="arrow-left"></icon></b-button>
+            </div>
+            <div class="w-50 text-right">{{ quizzIndex+1 }} / {{ statements.length }}</div>
+          </h3>
           <hr>
           <statement-mbti v-model="statements[quizzIndex].choice" :text="statements[quizzIndex].text" :on-answer="nextQuestion" class="py-5"></statement-mbti>
           <hr>
@@ -127,6 +132,10 @@ export default {
         if (this.quizzIndex === this.statements.length)
           this.sendResults();
       }, 300);
+    },
+    previousQuestion() {
+      if (this.quizzIndex > 0)
+        this.quizzIndex--;
     }
   }
 }
