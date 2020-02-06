@@ -50,7 +50,10 @@ export default new Vuex.Store({
   },
   mutations: {
     setMbtiResult(state, mbti) {
-      state.result.mbti = mbti.toUpperCase();
+      if (mbti)
+        state.result.mbti = mbti.toUpperCase();
+      else
+        state.result.mbti = null;
     },
     setBfResult(state, bf) {
       state.result.bf = bf;

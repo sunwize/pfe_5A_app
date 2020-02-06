@@ -25,6 +25,7 @@
               <p class="text-justify text-white">{{ result.desc }}</p>
             </b-col>
           </b-row>
+          <b-button v-if="result && !loading" @click="restart" class="mt-3" variant="outline-light"><icon icon="redo-alt"></icon> Recommencer</b-button>
         </div>
       </b-container>
     </div>
@@ -138,6 +139,10 @@ export default {
     previousQuestion() {
       if (this.quizzIndex > 0)
         this.quizzIndex--;
+    },
+    restart() {
+      this.$store.commit('setMbtiResult', null);
+      this.$router.go();
     }
   }
 }
