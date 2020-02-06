@@ -33,19 +33,16 @@
         </b-col>
       </b-row>
     </b-container>
+
     <b-modal id="personality-modal" size="xl" :title="selectedPersonality.title" hide-footer>
       <div class="p-3">
         <b-row class="pb-4">
           {{selectedPersonality.sigle}} {{selectedPersonality.desc}}
         </b-row>
         <b-row>
-          <b-col cols="12" md="6" class="m-auto text-center">
-            <h3>Words popularity</h3>
-            <b-img class="img-thumbnail" :src="require('../assets/img/example_words.png')"></b-img>
-          </b-col>
-          <b-col cols="12" md="6" class="m-auto text-center">
-            <h3>Words variance</h3>
-            <b-img class="img-thumbnail" :src="require('../assets/img/example_graph.png')"></b-img>
+          <b-col cols="8" class="mx-auto">
+            <h3 class="text-center">Les mots récurrents</h3>
+            <b-img class="img-thumbnail" :src="require('../assets/img/cloudwords/' + selectedPersonality.sigle.toLowerCase() + '.png')"></b-img>
           </b-col>
         </b-row>
       </div>
