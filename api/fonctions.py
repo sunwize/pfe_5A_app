@@ -234,6 +234,8 @@ def calculScoreBigFive(tabR=None):
     result = dict()
     result["score"] = ScoreG
     result["sigle"] = SigleBIG5
+   
+    print(result)
     print(SigleBIG5)
     print([ScoreG, SigleBIG5])
     return result
