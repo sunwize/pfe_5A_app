@@ -15,7 +15,7 @@
     "axios": "^0.19.0",
     "bootstrap": "latest",
     "bootstrap-vue": "latest",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "core-js": "^3.3.2",
     "fibers": "^4.0.2",
     "jquery": "^3.4.1",
